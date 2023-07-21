@@ -1,0 +1,17 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/CanXinWu/express_dome.git",
+  "author": "Canxin Wu <87754257+uuwuyysgdkklkffvvsfv8uj@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node-dev ./app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "node-dev": "^8.0.0"
+  }
+}
