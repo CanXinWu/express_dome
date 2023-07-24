@@ -2,6 +2,10 @@ const express = require('express')
 const orderRouter = express.Router()
 
 const fs = require('fs')
+orderRouter.use(express.json());
+
+// 解析 application/x-www-form-urlencoded 格式的请求体
+orderRouter.use(express.urlencoded({ extended: true }));
 // 读取JSON文件
 const orderFilePath = './mock/orderList.json'
 
@@ -27,8 +31,8 @@ orderRouter.get('/searchOrderList', (req, res) => {
         })
 })
 
-orderRouter.get('/updateOrderInfo', (req, res) => {
-    let query = req.query
+orderRouter.post('/updateOrderInfo', (req, res) => {
+    let query = req.body
     let orderNumber = query.orderNumber
     let updateFields = query.field
     let updateValue = query.value
