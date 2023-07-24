@@ -36,7 +36,7 @@ orderRouter.post('/updateOrderInfo', (req, res) => {
     let orderNumber = query.orderNumber
     let updateFields = query.field
     let updateValue = query.value
-    if (!orderNumber||orderJsonObject.findIndex(item=>item.parentOrderNumber===orderNumber)===-1) {
+    if (!orderNumber || orderJsonObject.findIndex(item => item.parentOrderNumber === orderNumber) === -1) {
         res.status(400)
             .json({
                 code: '400',
@@ -46,7 +46,7 @@ orderRouter.post('/updateOrderInfo', (req, res) => {
     } else {
         let add = false
         orderJsonObject.forEach(element => {
-            if(element.parentOrderNumber===orderNumber) {
+            if (element.parentOrderNumber === orderNumber) {
                 add = !element[updateFields]
                 element[updateFields] = updateValue
             }
@@ -57,7 +57,50 @@ orderRouter.post('/updateOrderInfo', (req, res) => {
             .json({
                 code: '200',
                 data: null,
-                msg: add?"add successful":'update successful'
+                msg: add ? "add successful" : 'update successful'
+            })
+    }
+})
+
+orderRouter.post('/addOrder', (req, res) => {
+    let { customerName, customerMail, parentOrderNumber, grandTotal } = req.body
+    if (!parentOrderNumber) res.status(400).json({
+        code: '400',
+        data: null,
+        msg: "parentOrderNumber is require"
+    })
+    if (!customerName) res.status(400).json({
+        code: '400',
+        data: null,
+        msg: "customerName is require"
+    })
+    if (!customerMail) res.status(400).json({
+        code: '400',
+        data: null,
+        msg: "customerMail is require"
+    })
+    if (!grandTotal) res.status(400).json({
+        code: '400',
+        data: null,
+        msg: "grandTotal is require"
+    })
+    const index = orderJsonObject.findIndex(item=>item.parentOrderNumber===parentOrderNumber)
+    if(index!==-1){
+        res.status(400)
+        .json({
+            code: '400',
+            data: null,
+            msg: "this parentOrderNumber is exist"
+        })
+    } else {
+        orderJsonObject.push(req.body)
+        const modifiedJsonData = JSON.stringify(orderJsonObject, null, 2);
+        fs.writeFileSync(orderFilePath, modifiedJsonData, 'utf-8');
+        res.status(200)
+            .json({
+                code: '200',
+                data: null,
+                msg: "add successful"
             })
     }
 })
